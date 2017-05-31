@@ -44,5 +44,5 @@ Step 6, add the lines on original image
  <img src="report_image/lines_edges.jpg" width="380" alt="Combined Image" />
  <figcaption>
  <p></p> 
- <p style="text-align: center;"> fu </p> 
+ <p style="text-align: center;"> full text of line</p> 
  </figcaption>

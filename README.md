@@ -55,14 +55,15 @@ In order to draw a single line on the left and right lanes, I modified the draw_
 Please see the code in "find_line_fangyan.ipynb" for details.
 
 ## Shortcomings with your current pipeline
-The main restraint for my current pipeline lies in the draw_lines() function. 
-First, since it is assumed that the left lane line lies in left half image and right lane lies in the right half, the draw_line function may become ineffective for those image in which lane lines are at other positions rather than the normal one.
+The main constraint for my current pipeline lies in the draw_lines() function.
 
-Second, this program does not work on lane lines at a large angle turn on the road, where the lane line become far away from straight. 
+First, this program does not work on lane lines at a large angle turn on the road, where the lane line become far away from straight. In that cases, the drawn line does not fit the lane line well enough.
 
-Third, the output of video stream is actually not satisfying, because the final drawn line is obtained by averaging all the slops of hough transform output lines, even though it works fine for an image, for a series of image, the slops the drawn line does not fit the lane line perfectly like shown in P1_example.mp4. 
+Second, since it is assumed that the left lane line lies in left half image and right lane lies in the right half, the draw_line function may become ineffective for those image in which lane lines are at other positions rather than the normal one.
 
-Besides, in some cases, the lane line become almost invisible after grayscale, like pictures shown below. In that case, this program even fail to find the left lane line, the tuning of parameters of canny and Hough transform does not helpful on this either. 
+Additional, some noise may also ruin the result, for example, in the challeng.mp4 video, there are some small yellow line which is close and nearly parallel to the yellow lane line, these slops of these some lines may be computed in averaging the slop of all candidate lines after Hough Transform. If number of these noise lines are large, the result is highly probable to be incorrect.
+
+Besides, in some cases, the lane line become almost invisible after grayscale, like pictures shown below. In that case, this program even fail to find the left lane line, the tuning of parameters of canny and Hough transform does not help either. 
 <figure>
  <img src="report_image/corner.jpg" width="380" alt="Combined Image" />
  <figcaption>

@@ -6,6 +6,16 @@ import cv2
 import sys
 import math
 
+global image_file 
+image_file = 0
+global pre_slop_right 
+global pre_dis_right 
+global pre_slop_left 
+global pre_dis_left 
+pre_slop_right = 0
+pre_dis_right = 0
+pre_slop_left = 0
+pre_dis_left = 0
 def grayscale(img):
     return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     
@@ -65,7 +75,7 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=3):
     slop_threshold = 0.006
     for line in lines:
         for x1,y1,x2,y2 in line:
-            # for lines with simlar slop and intercept, only choose the pair of points with longest distance 
+            # group lines with similar slop
             slop = (y1 - y2) / (x1 - x2)
             dis = y1 - slop * x1
             
@@ -138,9 +148,10 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=3):
         # choose the slop of a line with longest length as the slop of the corresponding lane line
         # since the position of the lane line is relatively fixed, we can limit the value of slop to remove some noise
         leng = Dis(p1, p2)
-        
-        if((slop > 0.5 and slop < 0.8) or (slop > -0.8 and slop < -0.5)):
+        print("slop ",  slop)
+        if((slop > 0.5 and slop < 0.9) or (slop > -0.9 and slop < -0.6)):
             # draw(upper_limit, lower_limit, slop, dis, img, color, thickness) 
+
             if(slop > 0 and p1[0] > (x_left_up + x_right_up) / 2):
                 valid_slops_right.append(slop)
                 valid_dis_right.append(dis)
@@ -152,22 +163,32 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=3):
     dis_right = 0
     slop_left = 0
     dis_left = 0
+    print(len(valid_slops_left))
     if(len(valid_slops_right) > 0):
         slop_right = np.sum(valid_slops_right) / len(valid_slops_right)
         dis_right = np.sum(valid_dis_right) / len(valid_dis_right)
     if(len(valid_slops_left) > 0):
         slop_left = np.sum(valid_slops_left) / len(valid_slops_left)
         dis_left = np.sum(valid_dis_left) / len(valid_dis_left)
-    # for i in range(3):
-    #     valid_slops_right.append(slop_right)
-    #     valid_dis_right.append(dis_right)
-    #     valid_slops_left.append(slop_left)
-    #     valid_dis_left.append(dis_left)
-    #     slop_right = np.sum(valid_slops_right) / len(valid_slops_right)
-    #     dis_right = np.sum(valid_dis_right) / len(valid_dis_right)
-    #     slop_left = np.sum(valid_slops_left) / len(valid_slops_left)
-    #     dis_left = np.sum(valid_dis_left) / len(valid_dis_left)
-    # draw the lines
+    # print("pre ", pre_slop_right, pre_dis_right,pre_slop_left,pre_dis_left)
+    # print("now ", slop_right, dis_right, slop_left, dis_left)
+    # pre_slop_right = 1
+    if(image_file != 0):
+        if(globals()["pre_slop_right"] != 0 and slop_right != 0):
+            
+            slop_right = (slop_right + 2 * pre_slop_right) / 3
+            dis_right = (dis_right + 2 * pre_dis_right) / 3
+    
+        if(globals()["pre_slop_left"] != 0 and slop_left != 0):
+           
+            slop_left = (slop_left + 2 * pre_slop_left) / 3
+            dis_left = (dis_left + 2 * pre_dis_left) / 3
+
+    globals()["pre_slop_right"] = slop_right
+    globals()["pre_dis_right"] = dis_right
+    globals()["pre_slop_left"] = slop_left
+    globals()["pre_dis_left"] = dis_left
+    print("didis ", pre_slop_right, pre_dis_right,pre_slop_left,pre_dis_left)
     if(slop_right != 0):
         draw(upper_limit, lower_limit, slop_right, dis_right, img, color, thickness)
     print("ss ", slop_left)
@@ -239,7 +260,7 @@ def find_line_in_image(image):
     # cv2.imshow('blur', blur)
     edges = canny(blur, low_threshold, high_threshold)
     # cv2.imwrite("edges.jpg", edges)
-    # cv2.imshow('edges', edges)
+    cv2.imshow('edges', edges)
     
     vertices = np.array([[(x_left_down,lower_limit),(x_left_up, upper_limit), (x_right_up, upper_limit), (x_right_down,lower_limit)]], dtype=np.int32)
     masked_edges = region_of_interest(edges, vertices)
@@ -261,7 +282,7 @@ def find_line_in_image(image):
 
 def for_lines():
     files = os.listdir(path)
-    
+    image_file = 0
     for file in files:
         if(file == '.DS_Store' or file == "."):
             continue
@@ -280,6 +301,7 @@ def for_video(name):
     white_input = os.path.join(video_path, input_video)
     print(white_input)
     clip1 = VideoFileClip(white_input)
+    globals()["image_file"] = 1
     white_clip = clip1.fl_image(find_line_in_image) #NOTE: this function expects color images!!
     white_clip.write_videofile(white_output, audio=False)
     HTML("""
@@ -290,6 +312,7 @@ def for_video(name):
 
 
 def single_image(name):
+    image_file = 0
     file = os.path.join(path, name)
     image = cv2.imread(file)
     print(file)
@@ -300,10 +323,11 @@ def single_image(name):
     cv2.waitKey(0)
 
 if __name__ == "__main__":
-	for_video("solidYellowLeft.mp4")
+	# for_video("solidYellowLeft.mp4")
     # for_video("solidWhiteRight.mp4")
-    # for_video("challenge.mp4")
+    for_video("challenge.mp4")
     # single_image("challenge.png")
     # single_image("solidWhiteRight.jpg")
-    # for_lines()
+    # for_lines()s
+
     

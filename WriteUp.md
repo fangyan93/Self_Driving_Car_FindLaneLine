@@ -10,7 +10,7 @@ My pipeline consists of 6 steps.
  </figcaption>
 Step 1, convert the images converted to grayscale 
 <figure>
- <img src="gray.jpg" width="380" alt="Combined Image" />
+ <img src="report_image/gray.jpg" width="380" alt="Combined Image" />
  <figcaption>
  <p></p> 
  <p style="text-align: center;"> Grayscale image </p> 
@@ -18,14 +18,14 @@ Step 1, convert the images converted to grayscale
 Step 2, apply gaussian smoothing on grayscaled images 
 Step 3, apply canny edge detection, obtain a set of edges
 <figure>
- <img src="edges.jpg" width="380" alt="Combined Image" />
+ <img src="report_image/edges.jpg" width="380" alt="Combined Image" />
  <figcaption>
  <p></p> 
  <p style="text-align: center;"> Edges afte edge detection </p> 
  </figcaption>
 Step 4, apply region mask, select edges in desired region
 <figure>
- <img src="masked_edges.jpg" width="380" alt="Combined Image" />
+ <img src="report_image/masked_edges.jpg" width="380" alt="Combined Image" />
  <figcaption>
  <p></p> 
  <p style="text-align: center;"> Edges after region mask </p> 
@@ -41,7 +41,7 @@ Step 5, use Hough transform to find and draw the lines
  <p></p> 
 Step 6, add the lines on original image
 <figure>
- <img src="lines_edges.jpg" width="380" alt="Combined Image" />
+ <img src="report_image/lines_edges.jpg" width="380" alt="Combined Image" />
  <figcaption>
  <p></p> 
  <p style="text-align: center;"> fu </p> 

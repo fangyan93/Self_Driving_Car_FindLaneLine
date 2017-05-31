@@ -78,8 +78,10 @@ Besides, in some cases, the lane line become almost invisible after grayscale, l
  <p style="text-align: center;"> Grayscale image </p> 
  </figcaption>
 ## Possible improvement
-For the first 3 shortcomings, I have spent a day to try seraval methods to overcome the current shortcomings, one way I have tried is to draw more than 1 lines at each half of image, but since the line segments of the lane line still have different slop, it is unreasonable to extrapolate each line to upper and lower bound of the region mask, other approaches also can not solve the problem on curve lines. 
+To fit the curve line, I have tried seraval methods to overcome the current shortcomings, one way I have tried is to draw more than 1 line at each half of image, but it is hard to decide the starting and ending points of lines with slightly different slops. 
 
-One possible way to improve is that do not average the slops, instead, merge or connect the line segments using starting and ending points on the line, extrapolate the line which is closest to bottom of image to the region lower bound, and extrapolate the line closest to upper bound of region mask to the upper bound. The output may not be very straight, but it should fit the lane line better and works on curve lane.
+One possible way to improve this is do not average the slops, instead, merge or connect the line segments using starting and ending points on the line, extend the line which is closest to bottom of image to bottom, and extend the line closest to upper limit of region mask to the upper limit. The output may not be very straight, but it should fit the lane line better and works on curve lane.
 
-For the 4th shortcoming, I have not tried it. But in order to improve this, some work has to be done before running grayscale() function. Maybe the color selection is helpful here, that is, only pixel close to yellow and white is reserved. 
+For noise, further function are needed in order to discriminate these noise, for example, if the current line is much shorted than the line has similar slop, discard it.
+
+For the grayscale problem, I think, in order to improve this, some work has to be done before running grayscale() function. Maybe the color selection is helpful here, that is, only pixel close to yellow and white is reserved.  

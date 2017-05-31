@@ -49,7 +49,10 @@ Step 6, add the lines on original image
  </figcaption>
 
 ## Revise Draw_line() function
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function by computing slop of each edge, grouping lines with similar slop, taking average on all negative slops to get the final slop for left lane line, obtaining the final slop for right lane line in the same way. Please see the code in "find_line_fangyan.ipynb" for details.
+In order to draw a single line on the left and right lanes, I modified the draw_lines() function by following:
+1. compute slop of each edge and group the lines with similar slop, 
+2. taking average on all negative slops to get the final slop for left lane line, obtaining the final slop for right lane line in the same way. 
+Please see the code in "find_line_fangyan.ipynb" for details.
 
 ## Shortcomings with your current pipeline
 The main restraint for my current pipeline lies in the draw_lines() function. 

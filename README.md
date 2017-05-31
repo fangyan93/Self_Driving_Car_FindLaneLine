@@ -63,7 +63,19 @@ Second, this program does not work on lane lines at a large angle turn on the ro
 Third, the output of video stream is actually not satisfying, because the final drawn line is obtained by averaging all the slops of hough transform output lines, even though it works fine for an image, for a series of image, the slops the drawn line does not fit the lane line perfectly like shown in P1_example.mp4. 
 
 Besides, in some cases, the lane line become almost invisible after grayscale, like pictures shown below. In that case, this program even fail to find the left lane line, the tuning of parameters of canny and Hough transform does not helpful on this either. 
-
+<figure>
+ <img src="report_image/corner.jpg" width="380" alt="Combined Image" />
+ <figcaption>
+ <p></p> 
+ <p style="text-align: center;"> Original image" </p> 
+ </figcaption>
+ 
+ <figure>
+ <img src="report_image/gray_corner.jpg" width="380" alt="Combined Image" />
+ <figcaption>
+ <p></p> 
+ <p style="text-align: center;"> Grayscale image </p> 
+ </figcaption>
 ## Possible improvement
 For the first 3 shortcomings, I have spent a day to try seraval methods to overcome the current shortcomings, one way I have tried is to draw more than 1 lines at each half of image, but since the line segments of the lane line still have different slop, it is unreasonable to extrapolate each line to upper and lower bound of the region mask, other approaches also can not solve the problem on curve lines. 
 
